@@ -119,7 +119,16 @@ SPSCRingBuffer/
 | `BM_PushOnly` | single-thread push throughput (upper bound, no contention) |
 | `BM_PopOnly` | single-thread pop throughput after pre-filling |
 
-Report results in the README after running on your machine.
+### Results (WSL2, 7x 2688 MHz, GCC 14.2, Release build)
+
+| Benchmark | Time | Throughput |
+|-----------|------|------------|
+| `BM_PushOnly` | 0.94 ns/op | 1.07 Gops/s |
+| `BM_PopOnly` | 0.72 ns/op | 1.38 Gops/s |
+| `BM_Throughput` | — | 595 Mops/s |
+| `BM_Latency_RTT` | 265 ns | — |
+
+> Measured on WSL2 — bare metal Linux will show lower latency.
 
 ---
 
