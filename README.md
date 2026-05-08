@@ -133,6 +133,31 @@ Use CMake with:
 
 ---
 
+## Building & Testing
+
+### Standard build
+```bash
+cmake -S . -B build
+cmake --build build
+cd build && ctest --output-on-failure
+```
+
+### TSan build (data race detection)
+
+> **WSL2 users:** run `sudo sysctl vm.mmap_rnd_bits=28` once before the TSan build.
+
+```bash
+cmake -S . -B build-tsan \
+    -DCMAKE_CXX_FLAGS="-fsanitize=thread" \
+    -DCMAKE_EXE_LINKER_FLAGS="-fsanitize=thread"
+cmake --build build-tsan
+cd build-tsan && ctest --output-on-failure
+```
+
+Expected: 9/9 tests pass, zero data race reports.
+
+---
+
 ## Acceptance Criteria
 
 - [ ] All tests pass under TSan with zero data race reports
