@@ -3,7 +3,7 @@
 #include "spsc_queue.h"
 
 static void BM_PushOnly(benchmark::State& state) {
-    SPSCQueue<int, 1024> q;
+    SPSCQueueLF<int, 1024> q;
     int i = 0;
     for (auto _ : state) {
         if (!q.try_push(i++))
@@ -14,7 +14,7 @@ static void BM_PushOnly(benchmark::State& state) {
 BENCHMARK(BM_PushOnly);
 
 static void BM_PopOnly(benchmark::State& state) {
-    SPSCQueue<int, 1024> q;
+    SPSCQueueLF<int, 1024> q;
     for (int i = 0; i < 1024; ++i) q.try_push(i);
     for (auto _ : state) {
         if (!q.try_pop())
@@ -25,7 +25,7 @@ static void BM_PopOnly(benchmark::State& state) {
 BENCHMARK(BM_PopOnly);
 
 static void BM_Throughput(benchmark::State& state) {
-    SPSCQueue<int, 4096> q;
+    SPSCQueueLF<int, 4096> q;
     constexpr int BATCH = 100'000;
 
     for (auto _ : state) {
@@ -47,8 +47,8 @@ static void BM_Throughput(benchmark::State& state) {
 BENCHMARK(BM_Throughput)->Unit(benchmark::kMillisecond);
 
 static void BM_Latency_RTT(benchmark::State& state) {
-    SPSCQueue<int, 4096> q_req;
-    SPSCQueue<int, 4096> q_resp;
+    SPSCQueueLF<int, 4096> q_req;
+    SPSCQueueLF<int, 4096> q_resp;
 
     std::thread responder([&]() {
         while (true) {

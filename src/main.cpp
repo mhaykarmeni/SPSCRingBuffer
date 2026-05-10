@@ -4,7 +4,7 @@
 #include "spsc_queue.h"
 
 int main() {
-    SPSCQueue<int, 1024> queue;
+    SPSCQueueLF<int, 1024> queue;
     constexpr int NUM_MESSAGES = 512;
 
     std::thread producer([&]() {

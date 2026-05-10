@@ -13,13 +13,13 @@ correct atomic memory ordering, cache-friendly layout, and measurable low-latenc
 
 ## What to Implement
 
-### Core class: `SPSCQueue<T, N>`
+### Core class: `SPSCQueueLF<T, N>`
 
 A fixed-capacity, lock-free queue for exactly one producer thread and one consumer thread.
 
 ```
 template<typename T, std::size_t N>
-class SPSCQueue { ... };
+class SPSCQueueLF { ... };
 ```
 
 **Template parameters:**

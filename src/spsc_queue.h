@@ -4,14 +4,14 @@
 #include <optional>
 
 template<typename T, std::size_t N>
-class SPSCQueue {
+class SPSCQueueLF {
     static_assert(N >= 2 && (N & (N - 1)) == 0, "N must be a power of 2");
 public:
-    SPSCQueue() = default;
-    SPSCQueue(const SPSCQueue&) = delete;
-    SPSCQueue& operator=(const SPSCQueue&) = delete;
-    SPSCQueue(SPSCQueue&&) = delete;
-    SPSCQueue& operator=(SPSCQueue&&) = delete;
+    SPSCQueueLF() = default;
+    SPSCQueueLF(const SPSCQueueLF&) = delete;
+    SPSCQueueLF& operator=(const SPSCQueueLF&) = delete;
+    SPSCQueueLF(SPSCQueueLF&&) = delete;
+    SPSCQueueLF& operator=(SPSCQueueLF&&) = delete;
 
     template<typename U>
     bool try_push(U&& val) {

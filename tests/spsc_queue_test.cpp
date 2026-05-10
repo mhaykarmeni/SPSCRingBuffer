@@ -3,28 +3,28 @@
 #include <vector>
 #include "spsc_queue.h"
 
-TEST(SPSCQueueTest, PushPop_SingleElement) {
-    SPSCQueue<int, 8> q;
+TEST(SPSCQueueLFTest, PushPop_SingleElement) {
+    SPSCQueueLF<int, 8> q;
     ASSERT_TRUE(q.try_push(42));
     auto val = q.try_pop();
     ASSERT_TRUE(val.has_value());
     EXPECT_EQ(*val, 42);
 }
 
-TEST(SPSCQueueTest, TryPop_WhenEmpty_ReturnsNullopt) {
-    SPSCQueue<int, 8> q;
+TEST(SPSCQueueLFTest, TryPop_WhenEmpty_ReturnsNullopt) {
+    SPSCQueueLF<int, 8> q;
     EXPECT_FALSE(q.try_pop().has_value());
 }
 
-TEST(SPSCQueueTest, TryPush_WhenFull_ReturnsFalse) {
-    SPSCQueue<int, 8> q;
+TEST(SPSCQueueLFTest, TryPush_WhenFull_ReturnsFalse) {
+    SPSCQueueLF<int, 8> q;
     for (int i = 0; i < 8; ++i)
         ASSERT_TRUE(q.try_push(i));
     EXPECT_FALSE(q.try_push(99));
 }
 
-TEST(SPSCQueueTest, EmptyAndFull) {
-    SPSCQueue<int, 8> q;
+TEST(SPSCQueueLFTest, EmptyAndFull) {
+    SPSCQueueLF<int, 8> q;
     EXPECT_TRUE(q.empty());
     EXPECT_FALSE(q.full());
 
@@ -35,8 +35,8 @@ TEST(SPSCQueueTest, EmptyAndFull) {
     EXPECT_TRUE(q.full());
 }
 
-TEST(SPSCQueueTest, FIFO_Order) {
-    SPSCQueue<int, 8> q;
+TEST(SPSCQueueLFTest, FIFO_Order) {
+    SPSCQueueLF<int, 8> q;
     for (int i = 0; i < 8; ++i)
         q.try_push(i);
     for (int i = 0; i < 8; ++i) {
@@ -46,8 +46,8 @@ TEST(SPSCQueueTest, FIFO_Order) {
     }
 }
 
-TEST(SPSCQueueTest, PushPop_FullCapacity) {
-    SPSCQueue<int, 16> q;
+TEST(SPSCQueueLFTest, PushPop_FullCapacity) {
+    SPSCQueueLF<int, 16> q;
     for (int i = 0; i < 16; ++i)
         ASSERT_TRUE(q.try_push(i));
     for (int i = 0; i < 16; ++i) {
@@ -58,8 +58,8 @@ TEST(SPSCQueueTest, PushPop_FullCapacity) {
     EXPECT_TRUE(q.empty());
 }
 
-TEST(SPSCQueueTest, WrapAround) {
-    SPSCQueue<int, 8> q;
+TEST(SPSCQueueLFTest, WrapAround) {
+    SPSCQueueLF<int, 8> q;
     // push/pop more than N elements total to force index wrap-around
     for (int round = 0; round < 4; ++round) {
         for (int i = 0; i < 8; ++i)
@@ -72,8 +72,8 @@ TEST(SPSCQueueTest, WrapAround) {
     }
 }
 
-TEST(SPSCQueueTest, Size) {
-    SPSCQueue<int, 8> q;
+TEST(SPSCQueueLFTest, Size) {
+    SPSCQueueLF<int, 8> q;
     EXPECT_EQ(q.size(), 0u);
     q.try_push(1);
     q.try_push(2);
@@ -82,9 +82,9 @@ TEST(SPSCQueueTest, Size) {
     EXPECT_EQ(q.size(), 1u);
 }
 
-TEST(SPSCQueueTest, Concurrent_StressTest) {
+TEST(SPSCQueueLFTest, Concurrent_StressTest) {
     constexpr int N = 1 << 16;
-    SPSCQueue<int, 1024> q;
+    SPSCQueueLF<int, 1024> q;
     std::vector<int> results;
     results.reserve(N);
 
