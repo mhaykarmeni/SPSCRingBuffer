@@ -119,7 +119,7 @@ SPSCRingBuffer/
 | `BM_PushOnly` | single-thread push throughput (upper bound, no contention) |
 | `BM_PopOnly` | single-thread pop throughput after pre-filling |
 
-### Results (WSL2, 7x 2688 MHz, GCC 14.2, Release build)
+### Results (Intel Core Ultra 7 155U, 20GB RAM, Ubuntu 24.04 WSL2, GCC 14.2, Release build)
 
 | Benchmark | Time | Throughput |
 |-----------|------|------------|
