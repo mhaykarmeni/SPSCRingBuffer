@@ -128,6 +128,15 @@ SPSCRingBuffer/
 | `BM_Throughput` | — | 595 Mops/s |
 | `BM_Latency_RTT` | 265 ns | — |
 
+### Results (AMD Ryzen 7 7730U, 7.5GB RAM, Ubuntu 24.04 WSL2, GCC 14.1, Release build)
+
+| Benchmark | Time | Throughput |
+|-----------|------|------------|
+| `BM_PushOnly` | 0.63 ns/op | 1.64 Gops/s |
+| `BM_PopOnly` | 0.61 ns/op | 1.70 Gops/s |
+| `BM_Throughput` | — | 954 Mops/s |
+| `BM_Latency_RTT` | 185 ns | — |
+
 > Measured on WSL2 — bare metal Linux will show lower latency.
 
 ---
