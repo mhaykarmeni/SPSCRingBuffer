@@ -1,4 +1,5 @@
 build/
+build-*/
 cmake-build-*/
 .cmake/
 CMakeCache.txt
@@ -11,3 +12,5 @@ CMakeFiles/
 compile_commands.json
 .clangd/
 .cache/
+*.swp
+*.swo

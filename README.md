@@ -1,5 +1,7 @@
 # SPSC Ring Buffer
 
+![CI](https://github.com/mhaykarmeni/SPSCRingBuffer/actions/workflows/ci.yml/badge.svg)
+
 Two SPSC (Single-Producer Single-Consumer) ring buffer implementations in modern C++20 — one lock-free, one mutex-based — with benchmarks comparing their performance.
 
 ---
