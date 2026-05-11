@@ -65,7 +65,8 @@ class SPSCQueueMtx { ... };
 
 - **Memory ordering** — `acquire`/`release` on head/tail loads and stores; `seq_cst` avoided entirely.
 - **Ownership** — head written only by consumer, tail written only by producer; no shared writes.
-- **Cache line isolation** — `head`, `tail`, and `buffer` each on their own `alignas(64)` cache line to eliminate false sharing.
+- **Cached index** — producer keeps `m_cached_head` and consumer keeps `m_cached_tail`, each co-located on the owner's cache line. The peer's atomic is only read when the cached value signals full/empty, eliminating cross-core cache coherence traffic in the common case.
+- **Cache line layout** — `m_tail`+`m_cached_head` share the producer's cache line; `m_head`+`m_cached_tail` share the consumer's cache line; `buffer` is on its own line.
 - **Index wrapping** — bitmask `index & (N - 1)` instead of modulo; requires N to be a power of 2.
 - **No heap allocation** — internal buffer is a plain `std::array<T, N>`.
 
@@ -125,10 +126,10 @@ The same 9 test cases run for both `SPSCQueueLFTest` and `SPSCQueueMtxTest` (18 
 
 | Benchmark | `SPSCQueueLF` | `SPSCQueueMtx` | Ratio |
 |-----------|--------------|----------------|-------|
-| `BM_PushOnly` | 0.55 ns / 1.66 Gops/s | 18.7 ns / 49 Mops/s | **34x slower** |
-| `BM_PopOnly` | 0.45 ns / 2.05 Gops/s | 18.6 ns / 49 Mops/s | **41x slower** |
-| `BM_Throughput` | 855 Mops/s | 608 Mops/s | 1.4x (WSL2 artifact) |
-| `BM_Latency_RTT` | 210 ns | 1162 ns | **5.5x slower** |
+| `BM_PushOnly` | 0.68 ns / 1.35 Gops/s | 19.2 ns / 47 Mops/s | **28x slower** |
+| `BM_PopOnly` | 0.57 ns / 1.61 Gops/s | 18.5 ns / 49 Mops/s | **32x slower** |
+| `BM_Throughput` | 848 Mops/s | 621 Mops/s | 1.4x (WSL2 artifact) |
+| `BM_Latency_RTT` | 181 ns | 1052 ns | **5.8x slower** |
 
 ### Results (AMD Ryzen 7 7730U, 8GB RAM, 2.0GHz, Ubuntu 24.04 WSL2, GCC 14.1, Release build)
 
@@ -176,7 +177,8 @@ cmake --build build-release
 ```bash
 cmake -S . -B build-tsan \
     -DCMAKE_CXX_FLAGS="-fsanitize=thread" \
-    -DCMAKE_EXE_LINKER_FLAGS="-fsanitize=thread"
+    -DCMAKE_EXE_LINKER_FLAGS="-fsanitize=thread" \
+    -DSPSC_BUILD_BENCH=OFF
 cmake --build build-tsan
 cd build-tsan && ctest --output-on-failure
 ```

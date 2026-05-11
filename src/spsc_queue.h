@@ -16,20 +16,24 @@ public:
 
     template<typename U>
     bool try_push(U&& val) {
-      auto tail = m_tail.load(std::memory_order_relaxed);
-      auto head = m_head.load(std::memory_order_acquire);
-      if (tail - head == N) 
-        return false;
-      m_buffer[tail & (N - 1)] = std::forward<U>(val);
-      m_tail.store(tail + 1, std::memory_order_release);
-      return true;
-    }    
+        auto tail = m_tail.load(std::memory_order_relaxed);
+        if (tail - m_cached_head == N) {
+            m_cached_head = m_head.load(std::memory_order_acquire);
+            if (tail - m_cached_head == N)
+                return false;
+        }
+        m_buffer[tail & (N - 1)] = std::forward<U>(val);
+        m_tail.store(tail + 1, std::memory_order_release);
+        return true;
+    }
 
     std::optional<T> try_pop() {
         auto head = m_head.load(std::memory_order_relaxed);
-        auto tail = m_tail.load(std::memory_order_acquire);
-        if (head == tail) 
-            return std::nullopt;
+        if (head == m_cached_tail) {
+            m_cached_tail = m_tail.load(std::memory_order_acquire);
+            if (head == m_cached_tail)
+                return std::nullopt;
+        }
         T val = std::move(m_buffer[head & (N - 1)]);
         m_head.store(head + 1, std::memory_order_release);
         return val;
@@ -49,8 +53,10 @@ public:
 
 private:
     alignas(64) std::array<T, N> m_buffer;
-    alignas(64) std::atomic<std::size_t> m_head = 0;
-    alignas(64) std::atomic<std::size_t> m_tail = 0;
+    alignas(64) std::atomic<std::size_t> m_tail{0};
+    std::size_t                          m_cached_head{0};
+    alignas(64) std::atomic<std::size_t> m_head{0};
+    std::size_t                          m_cached_tail{0};
 };
 
 

@@ -54,7 +54,8 @@ jobs:
           cmake -S . -B build-tsan \
             -DCMAKE_BUILD_TYPE=Debug \
             -DCMAKE_CXX_FLAGS="-fsanitize=thread" \
-            -DCMAKE_EXE_LINKER_FLAGS="-fsanitize=thread"
+            -DCMAKE_EXE_LINKER_FLAGS="-fsanitize=thread" \
+            -DSPSC_BUILD_BENCH=OFF
 
       - name: Build
         run: cmake --build build-tsan --target spsc_tests -j$(nproc)

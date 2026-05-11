@@ -27,14 +27,18 @@ target_link_libraries(spsc_tests PRIVATE GTest::gtest_main)
 include(GoogleTest)
 gtest_discover_tests(spsc_tests)
 
-FetchContent_Declare(
-    googlebenchmark
-    GIT_REPOSITORY https://github.com/google/benchmark.git
-    GIT_TAG        v1.9.1
-)
-set(BENCHMARK_ENABLE_TESTING OFF CACHE BOOL "" FORCE)
-FetchContent_MakeAvailable(googlebenchmark)
+option(SPSC_BUILD_BENCH "Build benchmarks" ON)
 
-add_executable(spsc_bench bench/spsc_queue_bench.cpp)
-target_include_directories(spsc_bench PRIVATE src)
-target_link_libraries(spsc_bench PRIVATE benchmark::benchmark)
+if(SPSC_BUILD_BENCH)
+    FetchContent_Declare(
+        googlebenchmark
+        GIT_REPOSITORY https://github.com/google/benchmark.git
+        GIT_TAG        v1.9.1
+    )
+    set(BENCHMARK_ENABLE_TESTING OFF CACHE BOOL "" FORCE)
+    FetchContent_MakeAvailable(googlebenchmark)
+
+    add_executable(spsc_bench bench/spsc_queue_bench.cpp)
+    target_include_directories(spsc_bench PRIVATE src)
+    target_link_libraries(spsc_bench PRIVATE benchmark::benchmark)
+endif()
