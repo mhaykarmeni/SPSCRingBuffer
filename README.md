@@ -135,10 +135,10 @@ The same 9 test cases run for both `SPSCQueueLFTest` and `SPSCQueueMtxTest` (18 
 
 | Benchmark | `SPSCQueueLF` | `SPSCQueueMtx` | Ratio |
 |-----------|--------------|----------------|-------|
-| `BM_PushOnly` | 1.56 ns / 658 Mops/s | 21.7 ns / 47 Mops/s | **14x slower** |
-| `BM_PopOnly` | 1.35 ns / 765 Mops/s | 21.5 ns / 48 Mops/s | **16x slower** |
-| `BM_Throughput` | 251 Mops/s | 313 Mops/s | ~1.2x (WSL2 artifact) |
-| `BM_Latency_RTT` | 308 ns | 2715 ns | **9x slower** |
+| `BM_PushOnly` | 2.37 ns / 435 Mops/s | 21.9 ns / 47 Mops/s | **9x slower** |
+| `BM_PopOnly` | 2.15 ns / 481 Mops/s | 21.5 ns / 48 Mops/s | **10x slower** |
+| `BM_Throughput` | 275 Mops/s | 275 Mops/s | ~1x |
+| `BM_Latency_RTT` | 251 ns | 2289 ns | **9x slower** |
 
 > Measured on WSL2 — bare metal Linux will show lower latency. The `BM_Throughput` inversion (mutex slightly ahead) is a WSL2 scheduling artifact; on bare metal lock-free wins across all benchmarks.
 
