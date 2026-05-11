@@ -2,7 +2,10 @@
 #include <mutex>
 #include <atomic>
 #include <array>
+#include <new>
 #include <optional>
+
+inline constexpr std::size_t kCacheLine = std::hardware_destructive_interference_size;
 
 template<typename T, std::size_t N>
 class SPSCQueueLF {
@@ -52,10 +55,10 @@ public:
     }
 
 private:
-    alignas(64) std::array<T, N> m_buffer;
-    alignas(64) std::atomic<std::size_t> m_tail{0};
+    alignas(kCacheLine) std::array<T, N> m_buffer;
+    alignas(kCacheLine) std::atomic<std::size_t> m_tail{0};
     std::size_t                          m_cached_head{0};
-    alignas(64) std::atomic<std::size_t> m_head{0};
+    alignas(kCacheLine) std::atomic<std::size_t> m_head{0};
     std::size_t                          m_cached_tail{0};
 };
 
@@ -105,8 +108,8 @@ public:
     }
 
 private:
-    alignas(64) std::array<T, N> m_buffer;
+    alignas(kCacheLine) std::array<T, N> m_buffer;
     std::size_t m_head = 0;
     std::size_t m_tail = 0;
-    alignas(64) mutable std::mutex m_mutex;
+    alignas(kCacheLine) mutable std::mutex m_mutex;
 };
