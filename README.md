@@ -119,7 +119,7 @@ SPSCRingBuffer/
 | `BM_PushOnly` | single-thread push throughput (upper bound, no contention) |
 | `BM_PopOnly` | single-thread pop throughput after pre-filling |
 
-### Results (Intel Core Ultra 7 155U, 20GB RAM, Ubuntu 24.04 WSL2, GCC 14.2, Release build)
+### Results (Intel Core Ultra 7 155U, 32GB RAM, 1.7GHz, Ubuntu 24.04 WSL2, GCC 14.2, Release build)
 
 | Benchmark | Time | Throughput |
 |-----------|------|------------|
@@ -128,7 +128,7 @@ SPSCRingBuffer/
 | `BM_Throughput` | — | 595 Mops/s |
 | `BM_Latency_RTT` | 265 ns | — |
 
-### Results (AMD Ryzen 7 7730U, 7.5GB RAM, Ubuntu 24.04 WSL2, GCC 14.1, Release build)
+### Results (AMD Ryzen 7 7730U, 8GB RAM, 2.0GHz, Ubuntu 24.04 WSL2, GCC 14.1, Release build)
 
 | Benchmark | Time | Throughput |
 |-----------|------|------------|
