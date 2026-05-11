@@ -121,12 +121,12 @@ The same 9 test cases run for both `SPSCQueueLFTest` and `SPSCQueueMtxTest` (18 
 
 ### Results (Intel Core Ultra 7 155U, 32GB RAM, 1.7GHz, Ubuntu 24.04 WSL2, GCC 14.2, Release build)
 
-| Benchmark | `SPSCQueueLF` | `SPSCQueueMtx` |
-|-----------|--------------|----------------|
-| `BM_PushOnly` | 0.94 ns / 1.07 Gops/s | — |
-| `BM_PopOnly` | 0.72 ns / 1.38 Gops/s | — |
-| `BM_Throughput` | 595 Mops/s | — |
-| `BM_Latency_RTT` | 265 ns | — |
+| Benchmark | `SPSCQueueLF` | `SPSCQueueMtx` | Ratio |
+|-----------|--------------|----------------|-------|
+| `BM_PushOnly` | 0.55 ns / 1.66 Gops/s | 18.7 ns / 49 Mops/s | **34x slower** |
+| `BM_PopOnly` | 0.45 ns / 2.05 Gops/s | 18.6 ns / 49 Mops/s | **41x slower** |
+| `BM_Throughput` | 855 Mops/s | 608 Mops/s | 1.4x (WSL2 artifact) |
+| `BM_Latency_RTT` | 210 ns | 1162 ns | **5.5x slower** |
 
 ### Results (AMD Ryzen 7 7730U, 8GB RAM, 2.0GHz, Ubuntu 24.04 WSL2, GCC 14.1, Release build)
 
